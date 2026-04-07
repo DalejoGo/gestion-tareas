@@ -1,0 +1,160 @@
+.fondo-gris {
+  --background: #f2f2f7;
+}
+
+ion-toolbar {
+  --background: #f2f2f7;
+  --border-width: 0;
+}
+
+.titulo-app {
+  font-size: 26px;
+  font-weight: 700;
+  text-align: left;
+  padding-left: 6px;
+  color: #000;
+}
+
+// ── CARD DE PROGRESO ─────────────────────────────────────────────
+.card-progreso {
+  background: white;
+  border-radius: 18px;
+  margin: 12px 16px;
+  padding: 18px 16px;
+}
+
+.fila-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 16px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.stat-numero {
+  font-size: 28px;
+  font-weight: 700;
+  color: #000;
+  &.naranja { color: #ff9500; }
+  &.verde   { color: #34c759; }
+}
+
+.stat-texto {
+  font-size: 12px;
+  color: #8e8e93;
+  font-weight: 500;
+}
+
+.barra-fondo {
+  background: #e5e5ea;
+  border-radius: 100px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.barra-relleno {
+  background: #007aff;
+  height: 100%;
+  border-radius: 100px;
+  transition: width 0.4s ease;
+}
+
+// ── PANTALLA VACÍA ───────────────────────────────────────────────
+.pantalla-vacia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 100px;
+  text-align: center;
+  padding: 20px;
+
+  ion-icon {
+    font-size: 80px;
+    color: #c7c7cc;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #000;
+    margin: 0 0 8px;
+  }
+
+  p {
+    font-size: 15px;
+    color: #8e8e93;
+    margin: 0;
+  }
+}
+
+// ── LISTA ────────────────────────────────────────────────────────
+.lista {
+  background: transparent;
+  padding: 0 16px;
+}
+
+.item-tarea {
+  --background: white;
+  --border-radius: 14px;
+  --padding-start: 14px;
+  --inner-padding-end: 0;
+  margin-bottom: 10px;
+  border-radius: 14px;
+
+  &.tarea-hecha {
+    opacity: 0.55;
+  }
+
+  h2 {
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+  }
+
+  p {
+    font-size: 13px;
+    color: #8e8e93;
+  }
+}
+
+.tachado {
+  text-decoration: line-through;
+  color: #8e8e93 !important;
+}
+
+// ── CÍRCULO CHECK ─────────────────────────────────────────────────
+.circulo {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #c7c7cc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+
+  &.circulo-activo {
+    background: #34c759;
+    border-color: #34c759;
+  }
+}
+
+.icono-check {
+  color: white;
+  font-size: 16px;
+}
+
+// ── BOTÓN + ───────────────────────────────────────────────────────
+.boton-agregar {
+  --background: #007aff;
+  --background-activated: #0062cc;
+}
