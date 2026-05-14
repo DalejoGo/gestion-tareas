@@ -12,7 +12,7 @@
 
 <ion-content [fullscreen]="true" class="focus-bg">
 
-  <!-- Tarjeta de estadisticas -->
+  <!-- Stats -->
   <div class="stats-card" *ngIf="items.length > 0">
     <div class="stats-row">
       <div class="stat-block">
@@ -44,45 +44,81 @@
     <p>Agrega tu primera tarea y comienza a enfocarte</p>
   </div>
 
-  <!-- Lista de tareas -->
-  <ion-list class="focus-list" *ngIf="items.length > 0">
-    <ion-item-sliding *ngFor="let item of items">
+  <!-- Lista -->
+  <div class="focus-list" *ngIf="items.length > 0">
+    <div class="task-container" [class.is-expanded]="item.expanded" *ngFor="let item of items">
 
-      <!-- Desliza derecha → completar -->
-      <ion-item-options side="start">
-        <ion-item-option
-          [color]="item.done ? 'medium' : 'success'"
-          (click)="toggleItem(item)"
-          expandable>
-          <ion-icon slot="icon-only" [name]="item.done ? 'arrow-undo-outline' : 'checkmark-outline'"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
+      <ion-item-sliding>
 
-      <!-- Item -->
-      <ion-item class="focus-item" [class.item-done]="item.done" lines="none">
-        <div slot="start" class="check-circle" [class.check-active]="item.done" (click)="toggleItem(item)">
-          <ion-icon *ngIf="item.done" name="checkmark" class="check-icon"></ion-icon>
+        <!-- Desliza derecha → completar -->
+        <ion-item-options side="start">
+          <ion-item-option [color]="item.done ? 'medium' : 'success'" (click)="toggleItem(item)" expandable>
+            <ion-icon slot="icon-only" [name]="item.done ? 'arrow-undo-outline' : 'checkmark-outline'"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+
+        <!-- Item principal -->
+        <ion-item class="focus-item" [class.item-done]="item.done" lines="none">
+          <div slot="start" class="check-circle" [class.check-active]="item.done" (click)="toggleItem(item)">
+            <ion-icon *ngIf="item.done" name="checkmark" class="check-icon"></ion-icon>
+          </div>
+
+          <ion-label>
+            <!-- Modo vista: tap titulo para editar -->
+            <h2 *ngIf="editingId !== item.id" [class.strikethrough]="item.done" (click)="startEdit(item)">
+              {{ item.title }}
+            </h2>
+            <!-- Modo edicion inline -->
+            <div *ngIf="editingId === item.id" class="inline-edit">
+              <ion-input
+                class="edit-input"
+                [value]="editingTitle"
+                (ionInput)="editingTitle = $event.detail.value ?? ''"
+                (keyup.enter)="confirmEdit(item)">
+              </ion-input>
+              <ion-icon name="checkmark-outline" class="edit-confirm" (click)="confirmEdit(item)"></ion-icon>
+              <ion-icon name="close-outline" class="edit-cancel" (click)="cancelEdit()"></ion-icon>
+            </div>
+            <p>
+              {{ item.done ? 'Completada' : 'En progreso' }}
+              <span *ngIf="item.subtasks && item.subtasks.length > 0"> · {{ item.subtasks.length }} sub-tarea{{ item.subtasks.length > 1 ? 's' : '' }}</span>
+            </p>
+          </ion-label>
+
+          <!-- Boton expandir sub-tareas -->
+          <div slot="end" class="expand-btn" (click)="toggleExpand(item)">
+            <ion-icon [name]="item.expanded ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+          </div>
+        </ion-item>
+
+        <!-- Desliza izquierda → eliminar -->
+        <ion-item-options side="end">
+          <ion-item-option color="danger" (click)="removeItem(item)" expandable>
+            <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+
+      </ion-item-sliding>
+
+      <!-- Sub-tareas (visible cuando expanded) -->
+      <div class="subtasks-wrap" *ngIf="item.expanded">
+        <div class="subtask-row" *ngFor="let sub of item.subtasks">
+          <div class="sub-check" [class.sub-check-active]="sub.done" (click)="toggleSubItem(item, sub)">
+            <ion-icon *ngIf="sub.done" name="checkmark" class="sub-check-icon"></ion-icon>
+          </div>
+          <span class="sub-title" [class.sub-done]="sub.done">{{ sub.title }}</span>
+          <ion-icon name="close-outline" class="sub-remove" (click)="removeSubItem(item, sub)"></ion-icon>
         </div>
-        <ion-label>
-          <h2 [class.strikethrough]="item.done">{{ item.title }}</h2>
-          <p>{{ item.done ? 'Completada' : 'En progreso' }}</p>
-        </ion-label>
-      </ion-item>
+        <div class="add-sub-row" (click)="addSubItem(item)">
+          <ion-icon name="add-outline"></ion-icon>
+          <span>Agregar sub-tarea</span>
+        </div>
+      </div>
 
-      <!-- Desliza izquierda → editar o eliminar -->
-      <ion-item-options side="end">
-        <ion-item-option color="warning" (click)="editItem(item)">
-          <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
-        </ion-item-option>
-        <ion-item-option color="danger" (click)="removeItem(item)" expandable>
-          <ion-icon slot="icon-only" name="close-outline"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
+    </div>
+  </div>
 
-    </ion-item-sliding>
-  </ion-list>
-
-  <!-- Boton agregar -->
+  <!-- FAB -->
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button (click)="addItem()" class="fab-add">
       <ion-icon name="add"></ion-icon>

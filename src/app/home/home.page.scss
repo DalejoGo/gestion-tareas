@@ -1,4 +1,4 @@
-// ── BASE ─────────────────────────────────────────────────────────
+// ── BASE ──────────────────────────────────────────────────────────
 .focus-bg {
   --background: #0f0f1a;
 }
@@ -147,16 +147,19 @@
 
 // ── LIST ──────────────────────────────────────────────────────────
 .focus-list {
-  background: transparent;
   padding: 0 16px;
 }
 
+.task-container {
+  margin-bottom: 10px;
+}
+
+// ── ITEM ──────────────────────────────────────────────────────────
 .focus-item {
   --background: #151525;
   --border-radius: 16px;
   --padding-start: 14px;
   --inner-padding-end: 0;
-  margin-bottom: 10px;
   border-radius: 16px;
   border: 1px solid #1e1e3f;
 
@@ -168,12 +171,18 @@
     font-size: 15px;
     font-weight: 500;
     color: #e0e0ff;
+    cursor: pointer;
   }
 
   p {
     font-size: 12px;
     color: #3d5afe;
   }
+}
+
+.task-container.is-expanded .focus-item {
+  border-radius: 16px 16px 0 0;
+  border-bottom: none;
 }
 
 .strikethrough {
@@ -204,6 +213,136 @@
 .check-icon {
   color: white;
   font-size: 14px;
+}
+
+// ── EXPAND BUTTON ─────────────────────────────────────────────────
+.expand-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  cursor: pointer;
+
+  ion-icon {
+    color: #3d5afe;
+    font-size: 18px;
+  }
+}
+
+// ── INLINE EDIT ───────────────────────────────────────────────────
+.inline-edit {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.edit-input {
+  --background: #1e1e3f;
+  --color: #e0e0ff;
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --padding-top: 2px;
+  --padding-bottom: 2px;
+  border-radius: 8px;
+  font-size: 14px;
+  flex: 1;
+  min-height: 32px;
+}
+
+.edit-confirm {
+  color: #448aff;
+  font-size: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.edit-cancel {
+  color: #ff5252;
+  font-size: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+// ── SUBTASKS ──────────────────────────────────────────────────────
+.subtasks-wrap {
+  background: #0f0f1a;
+  border: 1px solid #1e1e3f;
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  padding: 6px 12px 10px 50px;
+}
+
+.subtask-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid #151525;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.sub-check {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid #1e1e3f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+
+  &.sub-check-active {
+    background: #448aff;
+    border-color: #448aff;
+  }
+}
+
+.sub-check-icon {
+  color: white;
+  font-size: 11px;
+}
+
+.sub-title {
+  flex: 1;
+  font-size: 13px;
+  color: #b0b0d0;
+
+  &.sub-done {
+    text-decoration: line-through;
+    color: #3d5afe;
+  }
+}
+
+.sub-remove {
+  color: #2a2a5a;
+  font-size: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.2s;
+
+  &:active {
+    color: #ff5252;
+  }
+}
+
+.add-sub-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0 2px;
+  cursor: pointer;
+  color: #448aff;
+  font-size: 13px;
+
+  ion-icon {
+    font-size: 16px;
+  }
 }
 
 // ── FAB ───────────────────────────────────────────────────────────
