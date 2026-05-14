@@ -1,140 +1,192 @@
-.fondo-gris {
-  --background: #f2f2f7;
+// ── BASE ─────────────────────────────────────────────────────────
+.focus-bg {
+  --background: #0f0f1a;
 }
 
-ion-toolbar {
-  --background: #f2f2f7;
+.focus-toolbar {
+  --background: #0f0f1a;
   --border-width: 0;
 }
 
-.titulo-app {
-  font-size: 26px;
-  font-weight: 700;
-  text-align: left;
-  padding-left: 6px;
-  color: #000;
-}
-
-// ── CARD DE PROGRESO ─────────────────────────────────────────────
-.card-progreso {
-  background: white;
-  border-radius: 18px;
-  margin: 12px 16px;
-  padding: 18px 16px;
-}
-
-.fila-stats {
+.focus-header {
   display: flex;
-  justify-content: space-around;
-  margin-bottom: 16px;
-}
-
-.stat {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 2px;
+  justify-content: space-between;
+  padding: 8px 20px;
 }
 
-.stat-numero {
-  font-size: 28px;
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #448aff;
+  box-shadow: 0 0 8px rgba(68, 138, 255, 0.8);
+}
+
+.brand-name {
+  font-size: 22px;
   font-weight: 700;
-  color: #000;
-  &.naranja { color: #ff9500; }
-  &.verde   { color: #34c759; }
+  color: #ffffff;
+  letter-spacing: -0.3px;
 }
 
-.stat-texto {
+.header-date {
   font-size: 12px;
-  color: #8e8e93;
+  color: #3d5afe;
   font-weight: 500;
 }
 
-.barra-fondo {
-  background: #e5e5ea;
+// ── STATS CARD ────────────────────────────────────────────────────
+.stats-card {
+  background: #151525;
+  border-radius: 20px;
+  margin: 12px 16px;
+  padding: 20px 16px;
+  border: 1px solid #1e1e3f;
+}
+
+.stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 18px;
+}
+
+.stat-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 32px;
+  background: #1e1e3f;
+}
+
+.stat-val {
+  font-size: 30px;
+  font-weight: 700;
+  color: #e0e0ff;
+
+  &.accent-orange { color: #ffab40; }
+  &.accent-blue   { color: #448aff; }
+}
+
+.stat-lbl {
+  font-size: 10px;
+  color: #3d5afe;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.progress-track {
+  background: #1e1e3f;
   border-radius: 100px;
-  height: 8px;
+  height: 5px;
   overflow: hidden;
 }
 
-.barra-relleno {
-  background: #007aff;
+.progress-fill {
+  background: linear-gradient(90deg, #1a237e, #448aff);
   height: 100%;
   border-radius: 100px;
   transition: width 0.4s ease;
 }
 
-// ── PANTALLA VACÍA ───────────────────────────────────────────────
-.pantalla-vacia {
+// ── EMPTY STATE ───────────────────────────────────────────────────
+.empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 100px;
+  margin-top: 110px;
   text-align: center;
   padding: 20px;
+}
+
+.empty-icon-wrap {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: #151525;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  border: 1px solid #1e1e3f;
 
   ion-icon {
-    font-size: 80px;
-    color: #c7c7cc;
-    margin-bottom: 16px;
-  }
-
-  h2 {
-    font-size: 20px;
-    font-weight: 700;
-    color: #000;
-    margin: 0 0 8px;
-  }
-
-  p {
-    font-size: 15px;
-    color: #8e8e93;
-    margin: 0;
+    font-size: 42px;
+    color: #448aff;
   }
 }
 
-// ── LISTA ────────────────────────────────────────────────────────
-.lista {
+.empty-state h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #e0e0ff;
+  margin: 0 0 10px;
+}
+
+.empty-state p {
+  font-size: 14px;
+  color: #3d5afe;
+  margin: 0;
+  max-width: 220px;
+  line-height: 1.5;
+}
+
+// ── LIST ──────────────────────────────────────────────────────────
+.focus-list {
   background: transparent;
   padding: 0 16px;
 }
 
-.item-tarea {
-  --background: white;
-  --border-radius: 14px;
+.focus-item {
+  --background: #151525;
+  --border-radius: 16px;
   --padding-start: 14px;
   --inner-padding-end: 0;
   margin-bottom: 10px;
-  border-radius: 14px;
+  border-radius: 16px;
+  border: 1px solid #1e1e3f;
 
-  &.tarea-hecha {
-    opacity: 0.55;
+  &.item-done {
+    opacity: 0.45;
   }
 
   h2 {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 500;
-    color: #000;
+    color: #e0e0ff;
   }
 
   p {
-    font-size: 13px;
-    color: #8e8e93;
+    font-size: 12px;
+    color: #3d5afe;
   }
 }
 
-.tachado {
+.strikethrough {
   text-decoration: line-through;
-  color: #8e8e93 !important;
+  color: #3d5afe !important;
 }
 
-// ── CÍRCULO CHECK ─────────────────────────────────────────────────
-.circulo {
-  width: 28px;
-  height: 28px;
+// ── CHECK CIRCLE ──────────────────────────────────────────────────
+.check-circle {
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  border: 2px solid #c7c7cc;
+  border: 2px solid #1e1e3f;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -142,19 +194,21 @@ ion-toolbar {
   transition: all 0.2s;
   flex-shrink: 0;
 
-  &.circulo-activo {
-    background: #34c759;
-    border-color: #34c759;
+  &.check-active {
+    background: #448aff;
+    border-color: #448aff;
+    box-shadow: 0 0 10px rgba(68, 138, 255, 0.5);
   }
 }
 
-.icono-check {
+.check-icon {
   color: white;
-  font-size: 16px;
+  font-size: 14px;
 }
 
-// ── BOTÓN + ───────────────────────────────────────────────────────
-.boton-agregar {
-  --background: #007aff;
-  --background-activated: #0062cc;
+// ── FAB ───────────────────────────────────────────────────────────
+.fab-add {
+  --background: #448aff;
+  --background-activated: #1565c0;
+  --box-shadow: 0 4px 20px rgba(68, 138, 255, 0.5);
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
-import { ITask } from './itask.interface';
+import { IFocusItem } from './itask.interface';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +11,8 @@ import { ITask } from './itask.interface';
 })
 export class HomePage implements OnInit {
 
-  tasks: ITask[] = [];
+  items: IFocusItem[] = [];
+  today: string = '';
 
   constructor(
     private alertCtrl: AlertController,
@@ -20,53 +21,52 @@ export class HomePage implements OnInit {
   ) {}
 
   async ngOnInit() {
+    const date = new Date();
+    const formatted = date.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+    this.today = formatted.charAt(0).toUpperCase() + formatted.slice(1);
     await this.storage.create();
-    const saved = await this.storage.get('tasks');
-    if (saved) this.tasks = JSON.parse(saved);
+    const saved = await this.storage.get('focustask_items');
+    if (saved) this.items = JSON.parse(saved);
   }
 
-  // Cuántas tareas faltan por hacer
-  get pendientes(): number {
-    return this.tasks.filter(t => !t.done).length;
+  get pending(): number {
+    return this.items.filter(t => !t.done).length;
   }
 
-  // Porcentaje completado
-  get progreso(): number {
-    if (this.tasks.length === 0) return 0;
-    const hechas = this.tasks.filter(t => t.done).length;
-    return Math.round((hechas / this.tasks.length) * 100);
+  get completion(): number {
+    if (this.items.length === 0) return 0;
+    const done = this.items.filter(t => t.done).length;
+    return Math.round((done / this.items.length) * 100);
   }
 
-  // Guardar en el storage del celular
-  private async guardar() {
-    await this.storage.set('tasks', JSON.stringify(this.tasks));
+  private async save() {
+    await this.storage.set('focustask_items', JSON.stringify(this.items));
   }
 
-  // ── AGREGAR ──────────────────────────────────────────────────────
-  async agregar() {
+  async addItem() {
     const alert = await this.alertCtrl.create({
-      header: '✏️ Nueva tarea',
+      header: 'Nueva tarea',
       inputs: [{
-        name: 'titulo',
+        name: 'title',
         type: 'text',
-        placeholder: 'Escribe tu tarea aquí...'
+        placeholder: 'En que vas a enfocarte?'
       }],
       buttons: [
         { text: 'Cancelar', role: 'cancel' },
         {
-          text: 'Agregar',
+          text: 'Crear',
           handler: async (data) => {
-            if (!data.titulo || data.titulo.trim() === '') {
-              this.mostrarToast('Escribe el nombre de la tarea', 'warning');
+            if (!data.title || data.title.trim() === '') {
+              this.showToast('Escribe el nombre de la tarea', 'warning');
               return;
             }
-            this.tasks.unshift({
+            this.items.unshift({
               id: Date.now(),
-              title: data.titulo.trim(),
+              title: data.title.trim(),
               done: false
             });
-            await this.guardar();
-            this.mostrarToast('Tarea agregada', 'success');
+            await this.save();
+            this.showToast('Tarea creada', 'success');
           }
         }
       ]
@@ -74,14 +74,13 @@ export class HomePage implements OnInit {
     await alert.present();
   }
 
-  // ── EDITAR ───────────────────────────────────────────────────────
-  async editar(tarea: ITask) {
+  async editItem(item: IFocusItem) {
     const alert = await this.alertCtrl.create({
-      header: '✏️ Editar tarea',
+      header: 'Editar tarea',
       inputs: [{
-        name: 'titulo',
+        name: 'title',
         type: 'text',
-        value: tarea.title,
+        value: item.title,
         placeholder: 'Nombre de la tarea'
       }],
       buttons: [
@@ -89,14 +88,14 @@ export class HomePage implements OnInit {
         {
           text: 'Guardar',
           handler: async (data) => {
-            if (!data.titulo || data.titulo.trim() === '') {
-              this.mostrarToast('El nombre no puede estar vacío', 'warning');
+            if (!data.title || data.title.trim() === '') {
+              this.showToast('El nombre no puede estar vacio', 'warning');
               return;
             }
-            const i = this.tasks.findIndex(t => t.id === tarea.id);
-            this.tasks[i].title = data.titulo.trim();
-            await this.guardar();
-            this.mostrarToast('Tarea actualizada', 'primary');
+            const i = this.items.findIndex(t => t.id === item.id);
+            this.items[i].title = data.title.trim();
+            await this.save();
+            this.showToast('Tarea actualizada', 'primary');
           }
         }
       ]
@@ -104,20 +103,19 @@ export class HomePage implements OnInit {
     await alert.present();
   }
 
-  // ── ELIMINAR ─────────────────────────────────────────────────────
-  async eliminar(tarea: ITask) {
+  async removeItem(item: IFocusItem) {
     const alert = await this.alertCtrl.create({
       header: 'Eliminar tarea',
-      message: `¿Eliminar "${tarea.title}"?`,
+      message: `Deseas eliminar "${item.title}"?`,
       buttons: [
         { text: 'Cancelar', role: 'cancel' },
         {
           text: 'Eliminar',
           role: 'destructive',
           handler: async () => {
-            this.tasks = this.tasks.filter(t => t.id !== tarea.id);
-            await this.guardar();
-            this.mostrarToast('Tarea eliminada', 'danger');
+            this.items = this.items.filter(t => t.id !== item.id);
+            await this.save();
+            this.showToast('Tarea eliminada', 'danger');
           }
         }
       ]
@@ -125,17 +123,15 @@ export class HomePage implements OnInit {
     await alert.present();
   }
 
-  // ── MARCAR HECHA / PENDIENTE ─────────────────────────────────────
-  async marcarHecha(tarea: ITask) {
-    const i = this.tasks.findIndex(t => t.id === tarea.id);
-    this.tasks[i].done = !this.tasks[i].done;
-    await this.guardar();
+  async toggleItem(item: IFocusItem) {
+    const i = this.items.findIndex(t => t.id === item.id);
+    this.items[i].done = !this.items[i].done;
+    await this.save();
   }
 
-  // ── TOAST (mensajito arriba) ─────────────────────────────────────
-  async mostrarToast(mensaje: string, color: string) {
+  async showToast(message: string, color: string) {
     const toast = await this.toastCtrl.create({
-      message: mensaje,
+      message,
       duration: 2000,
       position: 'top',
       color

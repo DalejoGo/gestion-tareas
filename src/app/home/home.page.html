@@ -1,80 +1,90 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-title class="titulo-app">Mis Tareas</ion-title>
+  <ion-toolbar class="focus-toolbar">
+    <div class="focus-header">
+      <div class="header-brand">
+        <span class="brand-dot"></span>
+        <span class="brand-name">FocusTask</span>
+      </div>
+      <span class="header-date">{{ today }}</span>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="fondo-gris">
+<ion-content [fullscreen]="true" class="focus-bg">
 
-  <!-- Tarjeta de progreso -->
-  <div class="card-progreso" *ngIf="tasks.length > 0">
-    <div class="fila-stats">
-      <div class="stat">
-        <span class="stat-numero">{{ tasks.length }}</span>
-        <span class="stat-texto">Total</span>
+  <!-- Tarjeta de estadisticas -->
+  <div class="stats-card" *ngIf="items.length > 0">
+    <div class="stats-row">
+      <div class="stat-block">
+        <span class="stat-val">{{ items.length }}</span>
+        <span class="stat-lbl">Total</span>
       </div>
-      <div class="stat">
-        <span class="stat-numero naranja">{{ pendientes }}</span>
-        <span class="stat-texto">Pendientes</span>
+      <div class="stat-divider"></div>
+      <div class="stat-block">
+        <span class="stat-val accent-orange">{{ pending }}</span>
+        <span class="stat-lbl">En curso</span>
       </div>
-      <div class="stat">
-        <span class="stat-numero verde">{{ progreso }}%</span>
-        <span class="stat-texto">Completado</span>
+      <div class="stat-divider"></div>
+      <div class="stat-block">
+        <span class="stat-val accent-blue">{{ completion }}%</span>
+        <span class="stat-lbl">Logrado</span>
       </div>
     </div>
-    <div class="barra-fondo">
-      <div class="barra-relleno" [style.width.%]="progreso"></div>
+    <div class="progress-track">
+      <div class="progress-fill" [style.width.%]="completion"></div>
     </div>
   </div>
 
-  <!-- Pantalla vacía -->
-  <div class="pantalla-vacia" *ngIf="tasks.length === 0">
-    <ion-icon name="checkmark-done-circle-outline"></ion-icon>
-    <h2>Sin tareas pendientes</h2>
-    <p>Toca el botón + para agregar una</p>
+  <!-- Estado vacio -->
+  <div class="empty-state" *ngIf="items.length === 0">
+    <div class="empty-icon-wrap">
+      <ion-icon name="rocket-outline"></ion-icon>
+    </div>
+    <h2>Todo listo</h2>
+    <p>Agrega tu primera tarea y comienza a enfocarte</p>
   </div>
 
   <!-- Lista de tareas -->
-  <ion-list class="lista" *ngIf="tasks.length > 0">
-    <ion-item-sliding *ngFor="let tarea of tasks">
+  <ion-list class="focus-list" *ngIf="items.length > 0">
+    <ion-item-sliding *ngFor="let item of items">
 
-      <!-- Desliza a la derecha → marcar hecha -->
+      <!-- Desliza derecha → completar -->
       <ion-item-options side="start">
         <ion-item-option
-          [color]="tarea.done ? 'medium' : 'success'"
-          (click)="marcarHecha(tarea)"
+          [color]="item.done ? 'medium' : 'success'"
+          (click)="toggleItem(item)"
           expandable>
-          <ion-icon slot="icon-only" [name]="tarea.done ? 'arrow-undo' : 'checkmark'"></ion-icon>
+          <ion-icon slot="icon-only" [name]="item.done ? 'arrow-undo-outline' : 'checkmark-outline'"></ion-icon>
         </ion-item-option>
       </ion-item-options>
 
-      <!-- Tarea -->
-      <ion-item class="item-tarea" [class.tarea-hecha]="tarea.done" lines="none">
-        <div slot="start" class="circulo" [class.circulo-activo]="tarea.done" (click)="marcarHecha(tarea)">
-          <ion-icon *ngIf="tarea.done" name="checkmark" class="icono-check"></ion-icon>
+      <!-- Item -->
+      <ion-item class="focus-item" [class.item-done]="item.done" lines="none">
+        <div slot="start" class="check-circle" [class.check-active]="item.done" (click)="toggleItem(item)">
+          <ion-icon *ngIf="item.done" name="checkmark" class="check-icon"></ion-icon>
         </div>
         <ion-label>
-          <h2 [class.tachado]="tarea.done">{{ tarea.title }}</h2>
-          <p>{{ tarea.done ? 'Completada' : 'Pendiente' }}</p>
+          <h2 [class.strikethrough]="item.done">{{ item.title }}</h2>
+          <p>{{ item.done ? 'Completada' : 'En progreso' }}</p>
         </ion-label>
       </ion-item>
 
-      <!-- Desliza a la izquierda → editar o eliminar -->
+      <!-- Desliza izquierda → editar o eliminar -->
       <ion-item-options side="end">
-        <ion-item-option color="warning" (click)="editar(tarea)">
-          <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+        <ion-item-option color="warning" (click)="editItem(item)">
+          <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
         </ion-item-option>
-        <ion-item-option color="danger" (click)="eliminar(tarea)" expandable>
-          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        <ion-item-option color="danger" (click)="removeItem(item)" expandable>
+          <ion-icon slot="icon-only" name="close-outline"></ion-icon>
         </ion-item-option>
       </ion-item-options>
 
     </ion-item-sliding>
   </ion-list>
 
-  <!-- Botón flotante + -->
+  <!-- Boton agregar -->
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button (click)="agregar()" class="boton-agregar">
+    <ion-fab-button (click)="addItem()" class="fab-add">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
