@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ToastController } from '@ionic/angular';
+import { ActionSheetController, AlertController, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 import { IFocusItem, ISubItem } from './itask.interface';
 
@@ -19,6 +19,7 @@ export class HomePage implements OnInit {
   constructor(
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
+    private actionSheetCtrl: ActionSheetController,
     private storage: Storage
   ) {}
 
@@ -97,6 +98,30 @@ export class HomePage implements OnInit {
   cancelEdit() {
     this.editingId = null;
     this.editingTitle = '';
+  }
+
+  // ── MENU TRES PUNTOS ──────────────────────────────────────────────
+  async openMenu(item: IFocusItem) {
+    const sheet = await this.actionSheetCtrl.create({
+      buttons: [
+        {
+          text: 'Editar',
+          icon: 'pencil-outline',
+          handler: () => this.startEdit(item)
+        },
+        {
+          text: 'Eliminar',
+          icon: 'trash-outline',
+          role: 'destructive',
+          handler: () => this.removeItem(item)
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        }
+      ]
+    });
+    await sheet.present();
   }
 
   // ── ELIMINAR TAREA ────────────────────────────────────────────────

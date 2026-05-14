@@ -215,12 +215,20 @@
   font-size: 14px;
 }
 
-// ── EXPAND BUTTON ─────────────────────────────────────────────────
+// ── ITEM ACTIONS (tres puntos + chevron) ──────────────────────────
+.item-actions {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding-right: 4px;
+}
+
+.menu-btn,
 .expand-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 12px;
+  padding: 8px 8px;
   cursor: pointer;
 
   ion-icon {

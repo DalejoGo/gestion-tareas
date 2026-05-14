@@ -85,18 +85,16 @@
             </p>
           </ion-label>
 
-          <!-- Boton expandir sub-tareas -->
-          <div slot="end" class="expand-btn" (click)="toggleExpand(item)">
-            <ion-icon [name]="item.expanded ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+          <!-- Botones derecha: tres puntos + expandir -->
+          <div slot="end" class="item-actions">
+            <div class="menu-btn" (click)="openMenu(item); $event.stopPropagation()">
+              <ion-icon name="ellipsis-vertical"></ion-icon>
+            </div>
+            <div class="expand-btn" (click)="toggleExpand(item); $event.stopPropagation()">
+              <ion-icon [name]="item.expanded ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+            </div>
           </div>
         </ion-item>
-
-        <!-- Desliza izquierda → eliminar -->
-        <ion-item-options side="end">
-          <ion-item-option color="danger" (click)="removeItem(item)" expandable>
-            <ion-icon slot="icon-only" name="close-outline"></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
 
       </ion-item-sliding>
 
